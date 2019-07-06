@@ -1,3 +1,3 @@
-module github.com/YafimK/PexFinal
+module PexFinal
 
 go 1.12

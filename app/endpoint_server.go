@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 type EndpointServer struct {
@@ -13,10 +15,11 @@ type EndpointServer struct {
 
 func NewEndpointServer(host string) *EndpointServer {
 	router := http.NewServeMux()
+	u, _ := url.Parse(host)
 	endpointServer := &EndpointServer{
 		router: router,
 		server: &http.Server{
-			Addr:    host,
+			Addr:    u.Host,
 			Handler: router,
 		},
 		host: host}
@@ -24,6 +27,7 @@ func NewEndpointServer(host string) *EndpointServer {
 }
 
 func (es EndpointServer) Start() {
+	fmt.Printf("Starting server on - %v\n", es.host)
 	if err := es.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalln(err)
 	}
