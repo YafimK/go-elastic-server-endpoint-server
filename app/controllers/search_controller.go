@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"PeX/elastic_service"
+	"PeX/model"
 	"fmt"
 	"net/http"
 )
@@ -61,7 +63,7 @@ func isEmptyParam(value string) bool {
 }
 
 func validateTypeParamFieldValue(value string) bool {
-	for _, allowedValue := range TypeFieldsValues {
+	for _, allowedValue := range model.TypeFieldsValues {
 		if allowedValue == value {
 			return true
 		}

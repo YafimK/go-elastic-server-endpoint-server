@@ -1,6 +1,7 @@
 package main
 
 import (
+	"PeX/common"
 	"flag"
 	"fmt"
 	"log"
@@ -31,11 +32,11 @@ func NewRuntimeSettings() *Settings {
 	flag.Parse()
 
 	var err error
-	settings.EndpointServerHostAddress, err = parseUrl(host, false, false, true)
+	settings.EndpointServerHostAddress, err = common.ParseUrl(host, false, false, true)
 	if err != nil {
 		log.Fatal(BadArgumentError("host", err))
 	}
-	settings.ElasticServerAddress, err = parseUrl(elasticServerAddress, false, false, true)
+	settings.ElasticServerAddress, err = common.ParseUrl(elasticServerAddress, false, false, true)
 	if err != nil {
 		log.Fatal(BadArgumentError("es_host", err))
 	}

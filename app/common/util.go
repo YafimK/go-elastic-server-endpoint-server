@@ -1,11 +1,11 @@
-package main
+package common
 
 import (
 	"fmt"
 	"net/url"
 )
 
-func parseUrl(urlPath *string, allowEmptyScheme bool, allowEmptyHost bool, allowEmptyPath bool) (*url.URL, error) {
+func ParseUrl(urlPath *string, allowEmptyScheme bool, allowEmptyHost bool, allowEmptyPath bool) (*url.URL, error) {
 	address, err := url.Parse(*urlPath)
 	if err != nil {
 		return nil, err
