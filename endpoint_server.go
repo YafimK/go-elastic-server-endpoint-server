@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 )
 
 type EndpointServer struct {
@@ -15,11 +14,10 @@ type EndpointServer struct {
 
 func NewEndpointServer(host string) *EndpointServer {
 	router := http.NewServeMux()
-	u, _ := url.Parse(host)
 	endpointServer := &EndpointServer{
 		router: router,
 		server: &http.Server{
-			Addr:    u.Host,
+			Addr:    host,
 			Handler: router,
 		},
 		host: host}
