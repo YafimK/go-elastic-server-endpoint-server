@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  es:
+    image: elasticsearch:5
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elastic/data:/usr/share/elasticsearch/data
+
+  es-seed:
+    image: elasticsearch:5
+    command: /elastic/seed/es-seed-data.sh
+    volumes:
+      - ./elastic/seed:/seed
+
+  web:
+    image: endpointserver
+    build: .
+    ports:
+      - "8080:8080"
+
+      #kibana:
+      #image: kibana:5
+      #links:
+      #- elasticsearch
+      #ports:
+      #- "5601:5601"
+      #depends_on:
+      #- es
