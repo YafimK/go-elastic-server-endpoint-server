@@ -33,7 +33,10 @@ func (sc *SearchController) GetByField(responseWriter http.ResponseWriter, r *ht
 	}
 
 	response, err := sc.elasticClient.QueryByField(typeParam, valueParam)
-
+	if err != nil {
+		http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+	}
+	fmt.Fprint(responseWriter, response)
 }
 
 func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r *http.Request) {
@@ -44,6 +47,10 @@ func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r
 		return
 	}
 	response, err := sc.elasticClient.QueryAll(param)
+	if err != nil {
+		http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+	}
+	fmt.Fprint(responseWriter, response)
 }
 
 func HandleMissingHttpRequstParam(w http.ResponseWriter, paramName string) {

@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"fmt"
@@ -10,6 +10,10 @@ type EndpointServer struct {
 	router *http.ServeMux
 	server *http.Server
 	host   string
+}
+
+func (server EndpointServer) Router() *http.ServeMux {
+	return server.router
 }
 
 func NewEndpointServer(host string) *EndpointServer {
@@ -24,9 +28,9 @@ func NewEndpointServer(host string) *EndpointServer {
 	return endpointServer
 }
 
-func (es EndpointServer) Start() {
-	fmt.Printf("Starting server on - %v\n", es.host)
-	if err := es.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+func (server EndpointServer) Start() {
+	fmt.Printf("Starting server on - %v\n", server.host)
+	if err := server.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalln(err)
 	}
 }

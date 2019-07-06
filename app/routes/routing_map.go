@@ -1,4 +1,4 @@
-package main
+package routes
 
 import (
 	"fmt"
@@ -8,19 +8,19 @@ import (
 	"strings"
 )
 
-type Routes struct {
+type RoutingMap struct {
 	searchController *controllers.SearchController
 	handlerMap       map[string]http.HandlerFunc
 }
 
-func NewRoutes(searchController *controllers.SearchController) *Routes {
-	return &Routes{
+func NewRoutingMap(searchController *controllers.SearchController) *RoutingMap {
+	return &RoutingMap{
 		searchController: searchController,
 		handlerMap:       make(map[string]http.HandlerFunc),
 	}
 }
 
-func (routes *Routes) AddHandler(pattern string, handlerFunc http.HandlerFunc) error {
+func (routes *RoutingMap) AddHandler(pattern string, handlerFunc http.HandlerFunc) error {
 	if _, isFound := routes.handlerMap[pattern]; isFound {
 		return fmt.Errorf("pattern [%v] already has a registered handler", handlerFunc)
 	}
@@ -28,7 +28,7 @@ func (routes *Routes) AddHandler(pattern string, handlerFunc http.HandlerFunc) e
 	return nil
 }
 
-func (routes Routes) RegisterRoutes(mux *http.ServeMux) {
+func (routes RoutingMap) RegisterRoutes(mux *http.ServeMux) {
 	err := routes.AddHandler("/search", controllers.Get(routes.searchController.SearchByString))
 	if err != nil {
 		log.Fatalf("error during registering routes: %v\n", err)
@@ -40,7 +40,7 @@ func (routes Routes) RegisterRoutes(mux *http.ServeMux) {
 	RegisterHandlers(routes.handlerMap, mux)
 }
 
-func (routes *Routes) String() string {
+func (routes *RoutingMap) String() string {
 	message := strings.Builder{}
 	message.WriteString("Current registered patterns:\n")
 	message.WriteString("------------------------------\n")

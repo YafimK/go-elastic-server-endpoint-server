@@ -2,7 +2,7 @@ FROM golang:1.12.6
 
 ENV GO111MODULE=on
 
-ADD ./ /go/src/app
+ADD ./app /go/src/app
 WORKDIR /go/src/app
 RUN go get
 RUN go build -o EndpointServer
