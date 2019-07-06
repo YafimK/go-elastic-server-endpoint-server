@@ -7,10 +7,10 @@ const (
 	Timestamp
 	Domain
 	Blacklisted
-	event_type
+	EventType
 )
 
-var TypeFieldsValues = [...]string{"Timestamp", "Domain", "Blacklisted", "event_type"}
+var TypeFieldsValues = [...]string{"ip", "timestamp", "domain", "blacklisted", "event_type"}
 
 func (field TypeField) String() string {
 	return TypeFieldsValues[field]
