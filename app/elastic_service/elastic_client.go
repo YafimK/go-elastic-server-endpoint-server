@@ -37,10 +37,9 @@ func (client ElasticClient) QueryAll(searchValue string) (model.Documents, error
 	if res.IsError() {
 		var e map[string]interface{}
 		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
-			log.Fatalf("Error parsing the response body: %s", err)
+			return nil, fmt.Errorf("Error parsing the response body: %s", err)
 		} else {
-			// Print the response status and error information.
-			log.Fatalf("[%s] %s: %s",
+			return nil, fmt.Errorf("[%s] %s: %s",
 				res.Status(),
 				e["error"].(map[string]interface{})["type"],
 				e["error"].(map[string]interface{})["reason"],
@@ -52,7 +51,6 @@ func (client ElasticClient) QueryAll(searchValue string) (model.Documents, error
 	if err := json.NewDecoder(res.Body).Decode(&parsedResponse); err != nil {
 		log.Fatalf("Error parsing the response body: %s", err)
 	}
-	// Print the ID and document source for each hit.
 	var results model.Documents
 	for _, hit := range parsedResponse["hits"].(map[string]interface{})["hits"].([]interface{}) {
 		result := hit.(map[string]interface{})["_source"].(map[string]interface{})
@@ -93,10 +91,9 @@ func (client ElasticClient) QueryByField(fieldType string, fieldValue string) (m
 	if res.IsError() {
 		var e map[string]interface{}
 		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
-			log.Fatalf("Error parsing the response body: %s", err)
+			return nil, fmt.Errorf("Error parsing the response body: %s", err)
 		} else {
-			// Print the response status and error information.
-			log.Fatalf("[%s] %s: %s",
+			return nil, fmt.Errorf("[%s] %s: %s",
 				res.Status(),
 				e["error"].(map[string]interface{})["type"],
 				e["error"].(map[string]interface{})["reason"],
@@ -108,7 +105,6 @@ func (client ElasticClient) QueryByField(fieldType string, fieldValue string) (m
 	if err := json.NewDecoder(res.Body).Decode(&parsedResponse); err != nil {
 		log.Fatalf("Error parsing the response body: %s", err)
 	}
-	// Print the ID and document source for each hit.
 	var results model.Documents
 	for _, hit := range parsedResponse["hits"].(map[string]interface{})["hits"].([]interface{}) {
 		result := hit.(map[string]interface{})["_source"].(map[string]interface{})
