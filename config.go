@@ -16,6 +16,7 @@ var (
 type Settings struct {
 	EndpointServerHostAddress *url.URL
 	ElasticServerAddress      *url.URL
+	ElasticServerIndex        string
 }
 
 func BadArgumentError(argumentName string, err error) error {
@@ -26,7 +27,9 @@ func NewRuntimeSettings() *Settings {
 	settings := Settings{}
 	host := flag.String("host", "http://localhost:8080", "Gateway server address <host:port>")
 	elasticServerAddress := flag.String("es_host", "http://localhost:9200", "Elastic Server Address <protocol://host:port>")
+	settings.ElasticServerIndex = *flag.String("es_index", "page-views", "Elastic Server index")
 	flag.Parse()
+
 	var err error
 	settings.EndpointServerHostAddress, err = parseUrl(host, false, false, true)
 	if err != nil {

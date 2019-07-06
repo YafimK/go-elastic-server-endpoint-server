@@ -10,6 +10,14 @@ type ElasticClient struct {
 	index  string
 }
 
+func (client ElasticClient) QueryAll(s string) string {
+	return ""
+}
+
+func (client ElasticClient) QueryByField(s string) string {
+	return ""
+}
+
 func NewElasticClient(serverUrl string, index string) (*ElasticClient, error) {
 	elasticsearchConfig := elasticsearch.Config{
 		Addresses: []string{serverUrl},
