@@ -10,12 +10,12 @@ type ElasticClient struct {
 	index  string
 }
 
-func (client ElasticClient) QueryAll(s string) string {
-	return ""
+func (client ElasticClient) QueryAll(s string) string, err {
+	return "", nil
 }
 
-func (client ElasticClient) QueryByField(fieldType string, fieldValue string) string {
-	return ""
+func (client ElasticClient) QueryByField(fieldType string, fieldValue string) string, err {
+	return "", nil
 }
 
 func NewElasticClient(serverUrl string, index string) (*ElasticClient, error) {

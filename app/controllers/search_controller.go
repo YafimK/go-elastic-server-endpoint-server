@@ -32,7 +32,7 @@ func (sc *SearchController) GetByField(responseWriter http.ResponseWriter, r *ht
 		return
 	}
 
-	sc.elasticClient.QueryByField(typeParam, valueParam)
+	response, err := sc.elasticClient.QueryByField(typeParam, valueParam)
 
 }
 
@@ -43,7 +43,7 @@ func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r
 		HandleMissingHttpRequstParam(responseWriter, "s")
 		return
 	}
-	sc.elasticClient.QueryAll(param)
+	response, err := sc.elasticClient.QueryAll(param)
 }
 
 func HandleMissingHttpRequstParam(w http.ResponseWriter, paramName string) {
