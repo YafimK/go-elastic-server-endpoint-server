@@ -29,6 +29,9 @@ func (sc *SearchController) GetByField(responseWriter http.ResponseWriter, r *ht
 		HandleMissingHttpRequstParam(responseWriter, "value")
 		return
 	}
+
+	sc.elasticClient.QueryByField(typeParam, valueParam)
+
 }
 
 func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r *http.Request) {

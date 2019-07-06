@@ -14,7 +14,7 @@ func (client ElasticClient) QueryAll(s string) string {
 	return ""
 }
 
-func (client ElasticClient) QueryByField(s string) string {
+func (client ElasticClient) QueryByField(fieldType string, fieldValue string) string {
 	return ""
 }
 
@@ -26,7 +26,7 @@ func NewElasticClient(serverUrl string, index string) (*ElasticClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println(elasticsearch.Version)
+	log.Printf("Starting elastic server client with elastic server version - %v", elasticsearch.Version)
 	res, err := escServer.Info()
 	if err != nil {
 		log.Fatalf("Error getting response: %s", err)
@@ -35,6 +35,7 @@ func NewElasticClient(serverUrl string, index string) (*ElasticClient, error) {
 	if res.IsError() {
 		log.Fatalf("Error: %s", res.String())
 	}
+	log.Printf("Elastic server: - %v", res)
 
 	return &ElasticClient{
 		escServer, index,
