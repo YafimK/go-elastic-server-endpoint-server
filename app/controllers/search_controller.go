@@ -40,7 +40,6 @@ func (sc *SearchController) GetByField(responseWriter http.ResponseWriter, r *ht
 }
 
 func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r *http.Request) {
-	fmt.Println(r)
 	param := r.URL.Query().Get("s")
 	if !isEmptyParam(param) {
 		HandleMissingHttpRequstParam(responseWriter, "s")
