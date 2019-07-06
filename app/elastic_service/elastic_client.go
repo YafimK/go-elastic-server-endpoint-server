@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/YafimK/go-elastic-server-endpoint-server/model"
 	elasticsearch "github.com/elastic/go-elasticsearch/v5"
 	"log"
 )
@@ -13,7 +14,7 @@ type ElasticClient struct {
 	index         string
 }
 
-func (client ElasticClient) QueryAll(searchValue string) ([]interface{}, error) {
+func (client ElasticClient) QueryAll(searchValue string) (model.Documents, error) {
 	var buf bytes.Buffer
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -51,11 +52,18 @@ func (client ElasticClient) QueryAll(searchValue string) ([]interface{}, error) 
 	if err := json.NewDecoder(res.Body).Decode(&parsedResponse); err != nil {
 		log.Fatalf("Error parsing the response body: %s", err)
 	}
-	fmt.Println(parsedResponse)
 	// Print the ID and document source for each hit.
-	var results []interface{}
+	var results model.Documents
 	for _, hit := range parsedResponse["hits"].(map[string]interface{})["hits"].([]interface{}) {
-		results = append(results, hit.(map[string]interface{})["_source"])
+		result := hit.(map[string]interface{})["_source"].(map[string]interface{})
+		newDoc := model.Document{
+			Ip:            result["ip"].(string),
+			Timestamp:     result["timestamp"].(string),
+			Domain:        result["domain"].(string),
+			IsBlacklisted: result["blacklisted"].(bool),
+			EventType:     result["event_type"].(string),
+		}
+		results = append(results, newDoc)
 	}
 
 	return results, nil
@@ -73,7 +81,7 @@ func NewElasticClient(serverUrl string, index string) (*ElasticClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Starting elastic server elasticClient with elastic server version - %v", elasticsearch.Version)
+	log.Printf("Starting elastic server; version - %v", elasticsearch.Version)
 	res, err := escServer.Info()
 	if err != nil {
 		log.Fatalf("Error getting response: %s", err)
@@ -82,7 +90,7 @@ func NewElasticClient(serverUrl string, index string) (*ElasticClient, error) {
 	if res.IsError() {
 		log.Fatalf("Error: %s", res.String())
 	}
-	log.Printf("Elastic server: - %v", res)
+	log.Printf("Elastic server info: - %v", res)
 
 	return &ElasticClient{
 		escServer, index,
