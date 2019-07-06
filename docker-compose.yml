@@ -17,9 +17,10 @@ services:
 
   web:
     image: endpointserver
-    build: .
+    build: ./app
     ports:
       - "8080:8080"
+
 
       #kibana:
       #image: kibana:5
