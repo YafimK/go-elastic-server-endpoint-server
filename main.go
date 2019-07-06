@@ -1,12 +1,16 @@
 package main
 
-import "log"
+import (
+	"PeX/api"
+	"PeX/elastic_service"
+	"log"
+)
 
 func main() {
-	_, err := NewElasticClient(RuntimeSettings().ElasticServerAddress.String(), RuntimeSettings().ElasticServerIndex)
+	_, err := elastic_service.NewElasticClient(RuntimeSettings().ElasticServerAddress.String(), RuntimeSettings().ElasticServerIndex)
 	if err != nil {
 		log.Fatalf("Failed startiing elastic server client: %v\n", err)
 	}
-	endpointServer := NewEndpointServer(RuntimeSettings().EndpointServerHostAddress.Host)
+	endpointServer := api.NewEndpointServer(RuntimeSettings().EndpointServerHostAddress.Host)
 	endpointServer.Start()
 }

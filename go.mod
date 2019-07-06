@@ -1,4 +1,4 @@
-module github.com/Yafimk/PexFinal
+module PeX
 
 go 1.12
 

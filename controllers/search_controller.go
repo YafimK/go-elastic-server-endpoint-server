@@ -7,10 +7,10 @@ import (
 
 type SearchController struct {
 	cache         interface{} //TODO:
-	elasticClient *ElasticClient
+	elasticClient *elastic_service.ElasticClient
 }
 
-func NewSearchController(elasticClient *ElasticClient) *SearchController {
+func NewSearchController(elasticClient *elastic_service.ElasticClient) *SearchController {
 	return &SearchController{elasticClient: elasticClient}
 }
 
