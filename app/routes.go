@@ -1,8 +1,8 @@
 package main
 
 import (
-	"PeX/controllers"
 	"fmt"
+	"github.com/YafimK/go-elastic-server-endpoint-server/controllers"
 	"log"
 	"net/http"
 	"strings"
@@ -13,7 +13,7 @@ type Routes struct {
 	handlerMap       map[string]http.HandlerFunc
 }
 
-func NewRoutes(searchController *SearchController) *Routes {
+func NewRoutes(searchController *controllers.SearchController) *Routes {
 	return &Routes{
 		searchController: searchController,
 		handlerMap:       make(map[string]http.HandlerFunc),
@@ -29,7 +29,7 @@ func (routes *Routes) AddHandler(pattern string, handlerFunc http.HandlerFunc) e
 }
 
 func (routes Routes) RegisterRoutes(mux *http.ServeMux) {
-	err := routes.AddHandler("/search", controllers.Get(routes.searchController.SearchAllByString))
+	err := routes.AddHandler("/search", controllers.Get(routes.searchController.SearchByString))
 	if err != nil {
 		log.Fatalf("error during registering routes: %v\n", err)
 	}

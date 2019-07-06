@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"PeX/elastic_service"
-	"PeX/model"
 	"fmt"
+	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
+	"github.com/YafimK/go-elastic-server-endpoint-server/model"
 	"net/http"
 )
 

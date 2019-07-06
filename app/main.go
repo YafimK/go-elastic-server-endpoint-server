@@ -1,8 +1,8 @@
 package main
 
 import (
-	"PeX/api"
-	"PeX/elastic_service"
+	"github.com/YafimK/go-elastic-server-endpoint-server/api"
+	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 	"log"
 )
 

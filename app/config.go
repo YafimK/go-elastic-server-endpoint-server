@@ -1,9 +1,9 @@
 package main
 
 import (
-	"PeX/common"
 	"flag"
 	"fmt"
+	"github.com/YafimK/go-elastic-server-endpoint-server/common"
 	"log"
 	"net/url"
 	"sync"
