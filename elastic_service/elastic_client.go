@@ -1,4 +1,4 @@
-package main
+package elastic_service
 
 import (
 	elasticsearch "github.com/elastic/go-elasticsearch/v5"
