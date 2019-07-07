@@ -50,18 +50,23 @@ func (sc *SearchController) GetByField(elasticClientQueryByField ElasticClientQu
 type ElasticClientQueryAllCallback func(value string) (model.Documents, error)
 
 func (sc *SearchController) SearchByString(elasticClientQueryAllCallback ElasticClientQueryAllCallback) http.HandlerFunc {
-	return func(responseWriter http.ResponseWriter, r *http.Request) {
-		param := r.URL.Query().Get("s")
+	return func(responseWriter http.ResponseWriter, request *http.Request) {
+		param := request.URL.Query().Get("s")
 		if !isEmptyParam(param) {
 			HandleMissingHttpRequstParam(responseWriter, "s")
 			return
 		}
-		response, err := elasticClientQueryAllCallback(param)
-		if err != nil {
-			http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+		var result model.Documents
+		var err error
+
+		if result = sc.cache.LookupQueryCache(param); result == nil {
+			if result, err = elasticClientQueryAllCallback(param); err != nil {
+				http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+			}
+			sc.cache.InsertQuery(param, result)
 		}
 
-		err = common.RespondAsJson(responseWriter, response)
+		err = common.RespondAsJson(responseWriter, result)
 		if err != nil {
 			http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		}
