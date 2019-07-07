@@ -8,7 +8,6 @@ import (
 
 func main() {
 	endpointServer := server.NewEndpointServer(config.RuntimeSettings().EndpointServerHostAddress.Host)
-	routes.NewRoutingMap().RegisterRoutes(endpointServer.Router())
-
+	routes.NewSeachRoutingMap().RegisterRoutes(endpointServer.Router())
 	endpointServer.Start()
 }

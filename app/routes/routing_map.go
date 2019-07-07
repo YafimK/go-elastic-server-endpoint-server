@@ -16,7 +16,7 @@ type SearchRoutingMap struct {
 	handlerMap       map[string]http.HandlerFunc
 }
 
-func NewRoutingMap() *SearchRoutingMap {
+func NewSeachRoutingMap() *SearchRoutingMap {
 	elasticClient, err := elastic_service.NewElasticClient(config.RuntimeSettings().ElasticServerAddress.String(), config.RuntimeSettings().ElasticServerIndex)
 	if err != nil {
 		log.Fatalf("Failed startiing elastic server client: %v\n", err)
@@ -38,11 +38,11 @@ func (routes *SearchRoutingMap) AddHandler(pattern string, handlerFunc http.Hand
 }
 
 func (routes SearchRoutingMap) RegisterRoutes(mux *http.ServeMux) {
-	err := routes.AddHandler("/search", controllers.Get(routes.searchController.SearchByString))
+	err := routes.AddHandler("/search", controllers.Get(routes.searchController.SearchByString(routes.elasticClient.QueryAll)))
 	if err != nil {
 		log.Fatalf("error during registering routes: %v\n", err)
 	}
-	err = routes.AddHandler("/field", controllers.Get(routes.searchController.GetByField))
+	err = routes.AddHandler("/field", controllers.Get(routes.searchController.GetByField(routes.elasticClient.QueryByField)))
 	if err != nil {
 		log.Fatalf("error during registering routes: %v\n", err)
 	}

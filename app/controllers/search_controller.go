@@ -17,47 +17,56 @@ func NewSearchController(elasticClient *elastic_service.ElasticClient) *SearchCo
 	return &SearchController{elasticClient: elasticClient}
 }
 
-func (sc *SearchController) GetByField(responseWriter http.ResponseWriter, r *http.Request) {
-	typeParam := r.URL.Query().Get("type")
-	if !isEmptyParam(typeParam) {
-		HandleMissingHttpRequstParam(responseWriter, "type")
-		return
-	}
-	if !validateTypeParamFieldValue(typeParam) {
-		HandleBadRequestTypeParam(responseWriter, typeParam)
-		return
-	}
-	valueParam := r.URL.Query().Get("value")
-	if len(valueParam) == 0 {
-		HandleMissingHttpRequstParam(responseWriter, "value")
-		return
-	}
+type ElasticClientQueryByField func(typeParam string, valueParam string) (model.Documents, error)
 
-	response, err := sc.elasticClient.QueryByField(typeParam, valueParam)
-	if err != nil {
-		http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
-	}
-	err = common.RespondAsJson(responseWriter, response)
-	if err != nil {
-		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+func (sc *SearchController) GetByField(elasticClientQueryByField ElasticClientQueryByField) http.HandlerFunc {
+	return func(responseWriter http.ResponseWriter, r *http.Request) {
+		typeParam := r.URL.Query().Get("type")
+		if !isEmptyParam(typeParam) {
+			HandleMissingHttpRequstParam(responseWriter, "type")
+			return
+		}
+		if !validateTypeParamFieldValue(typeParam) {
+			HandleBadRequestTypeParam(responseWriter, typeParam)
+			return
+		}
+		valueParam := r.URL.Query().Get("value")
+		if len(valueParam) == 0 {
+			HandleMissingHttpRequstParam(responseWriter, "value")
+			return
+		}
+
+		response, err := elasticClientQueryByField(typeParam, valueParam)
+		if err != nil {
+			http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+		}
+		err = common.RespondAsJson(responseWriter, response)
+		if err != nil {
+			http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		}
 	}
 }
 
-func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r *http.Request) {
-	param := r.URL.Query().Get("s")
-	if !isEmptyParam(param) {
-		HandleMissingHttpRequstParam(responseWriter, "s")
-		return
-	}
-	response, err := sc.elasticClient.QueryAll(param)
-	if err != nil {
-		http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+type ElasticClientQueryAllCallback func(value string) (model.Documents, error)
+
+func (sc *SearchController) SearchByString(elasticClientQueryAllCallback ElasticClientQueryAllCallback) http.HandlerFunc {
+	return func(responseWriter http.ResponseWriter, r *http.Request) {
+		param := r.URL.Query().Get("s")
+		if !isEmptyParam(param) {
+			HandleMissingHttpRequstParam(responseWriter, "s")
+			return
+		}
+		response, err := elasticClientQueryAllCallback(param)
+		if err != nil {
+			http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
+		}
+
+		err = common.RespondAsJson(responseWriter, response)
+		if err != nil {
+			http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		}
 	}
 
-	err = common.RespondAsJson(responseWriter, response)
-	if err != nil {
-		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
-	}
 }
 
 func HandleMissingHttpRequstParam(w http.ResponseWriter, paramName string) {
