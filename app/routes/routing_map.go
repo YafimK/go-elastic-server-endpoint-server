@@ -10,26 +10,26 @@ import (
 	"strings"
 )
 
-type RoutingMap struct {
+type SearchRoutingMap struct {
 	elasticClient    *elastic_service.ElasticClient
 	searchController *controllers.SearchController
 	handlerMap       map[string]http.HandlerFunc
 }
 
-func NewRoutingMap() *RoutingMap {
+func NewRoutingMap() *SearchRoutingMap {
 	elasticClient, err := elastic_service.NewElasticClient(config.RuntimeSettings().ElasticServerAddress.String(), config.RuntimeSettings().ElasticServerIndex)
 	if err != nil {
 		log.Fatalf("Failed startiing elastic server client: %v\n", err)
 	}
 	searchController := controllers.NewSearchController(elasticClient)
-	return &RoutingMap{
+	return &SearchRoutingMap{
 		elasticClient:    elasticClient,
 		searchController: searchController,
 		handlerMap:       make(map[string]http.HandlerFunc),
 	}
 }
 
-func (routes *RoutingMap) AddHandler(pattern string, handlerFunc http.HandlerFunc) error {
+func (routes *SearchRoutingMap) AddHandler(pattern string, handlerFunc http.HandlerFunc) error {
 	if _, isFound := routes.handlerMap[pattern]; isFound {
 		return fmt.Errorf("pattern [%v] already has a registered handler", handlerFunc)
 	}
@@ -37,7 +37,7 @@ func (routes *RoutingMap) AddHandler(pattern string, handlerFunc http.HandlerFun
 	return nil
 }
 
-func (routes RoutingMap) RegisterRoutes(mux *http.ServeMux) {
+func (routes SearchRoutingMap) RegisterRoutes(mux *http.ServeMux) {
 	err := routes.AddHandler("/search", controllers.Get(routes.searchController.SearchByString))
 	if err != nil {
 		log.Fatalf("error during registering routes: %v\n", err)
@@ -49,7 +49,7 @@ func (routes RoutingMap) RegisterRoutes(mux *http.ServeMux) {
 	RegisterHandlers(routes.handlerMap, mux)
 }
 
-func (routes *RoutingMap) String() string {
+func (routes *SearchRoutingMap) String() string {
 	message := strings.Builder{}
 	message.WriteString("Current registered patterns:\n")
 	message.WriteString("------------------------------\n")
