@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	"github.com/YafimK/go-elastic-server-endpoint-server/config"
 	"github.com/YafimK/go-elastic-server-endpoint-server/controllers"
 	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 	"log"
@@ -16,7 +17,7 @@ type RoutingMap struct {
 }
 
 func NewRoutingMap() *RoutingMap {
-	elasticClient, err := elastic_service.NewElasticClient(RuntimeSettings().ElasticServerAddress.String(), RuntimeSettings().ElasticServerIndex)
+	elasticClient, err := elastic_service.NewElasticClient(config.RuntimeSettings().ElasticServerAddress.String(), config.RuntimeSettings().ElasticServerIndex)
 	if err != nil {
 		log.Fatalf("Failed startiing elastic server client: %v\n", err)
 	}
