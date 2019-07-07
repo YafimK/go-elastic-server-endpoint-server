@@ -19,7 +19,7 @@ func NewSearchController(elasticClient *elastic_service.ElasticClient) *SearchCo
 
 type ElasticClientQueryByField func(typeParam string, valueParam string) (model.Documents, error)
 
-func (sc *SearchController) GetByField(elasticClientQueryByField ElasticClientQueryByField) http.HandlerFunc {
+func (sc SearchController) GetByField(elasticClientQueryByField ElasticClientQueryByField) http.HandlerFunc {
 	return func(responseWriter http.ResponseWriter, r *http.Request) {
 		typeParam := r.URL.Query().Get("type")
 		if !isEmptyParam(typeParam) {
@@ -49,7 +49,7 @@ func (sc *SearchController) GetByField(elasticClientQueryByField ElasticClientQu
 
 type ElasticClientQueryAllCallback func(value string) (model.Documents, error)
 
-func (sc *SearchController) SearchByString(elasticClientQueryAllCallback ElasticClientQueryAllCallback) http.HandlerFunc {
+func (sc SearchController) SearchByString(elasticClientQueryAllCallback ElasticClientQueryAllCallback) http.HandlerFunc {
 	return func(responseWriter http.ResponseWriter, request *http.Request) {
 		param := request.URL.Query().Get("s")
 		if !isEmptyParam(param) {
