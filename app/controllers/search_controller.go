@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 	"github.com/YafimK/go-elastic-server-endpoint-server/model"
@@ -36,7 +37,14 @@ func (sc *SearchController) GetByField(responseWriter http.ResponseWriter, r *ht
 	if err != nil {
 		http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
 	}
-	fmt.Fprint(responseWriter, response)
+	marsheledResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.Header().Set("Content-Type", "application/json")
+	responseWriter.Write(marsheledResponse)
 }
 
 func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r *http.Request) {
@@ -49,7 +57,14 @@ func (sc *SearchController) SearchByString(responseWriter http.ResponseWriter, r
 	if err != nil {
 		http.Error(responseWriter, fmt.Sprintf("Failed getting search results from server %v", err), http.StatusInternalServerError)
 	}
-	fmt.Fprint(responseWriter, response)
+	marsheledResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.Header().Set("Content-Type", "application/json")
+	responseWriter.Write(marsheledResponse)
 }
 
 func HandleMissingHttpRequstParam(w http.ResponseWriter, paramName string) {
