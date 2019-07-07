@@ -11,15 +11,22 @@ services:
 
   es-seed:
     image: elasticsearch:5
-    command: /elastic/seed/es-seed-data.sh
+    command: /seed/es-seed-data.sh
     volumes:
       - ./elastic/seed:/seed
 
   web:
     image: endpointserver
     build: ./app
+    command:  ["./EndpointServer","-es_host","http://es:9200", "-host","http://web:8080"]
+    links:
+      - es
+    depends_on:
+      - es
+      - es-seed
     ports:
       - "8080:8080"
+    restart: on-failure
 
 
       #kibana:

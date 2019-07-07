@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/YafimK/go-elastic-server-endpoint-server/model"
-	elasticsearch "github.com/elastic/go-elasticsearch/v5"
+	"github.com/elastic/go-elasticsearch/v5"
 	"log"
 )
 

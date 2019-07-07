@@ -2,11 +2,10 @@ FROM golang:1.12.6
 
 ENV GO111MODULE=on
 
-ADD ./ /go/src/app
-WORKDIR /go/src/app
-RUN go get
-RUN go build -o EndpointServer
+ADD . /
+WORKDIR /
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o EndpointServer .
 EXPOSE 8080
-#ENV PORT=8080
 
-CMD ["./EndpointServer"]
+CMD ["/EndpointServer"]
