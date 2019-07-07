@@ -14,7 +14,7 @@ func NewCache() *DocumentCache {
 	return &DocumentCache{QueryCache: make(map[string]model.Documents)}
 }
 
-func (dc DocumentCache) LookupQueryCache(value string) model.Documents {
+func (dc *DocumentCache) LookupQueryCache(value string) model.Documents {
 	dc.lock.RLock()
 	defer dc.lock.RUnlock()
 

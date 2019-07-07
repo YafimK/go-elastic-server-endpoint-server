@@ -83,11 +83,7 @@ func HandleBadRequestTypeParam(w http.ResponseWriter, paramValue string) {
 }
 
 func isEmptyParam(value string) bool {
-	if len(value) == 0 {
-		return false
-	}
-
-	return true
+	return len(value) == 0
 }
 
 func validateTypeParamFieldValue(value string) bool {
