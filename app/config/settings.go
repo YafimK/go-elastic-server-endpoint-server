@@ -21,7 +21,7 @@ type Settings struct {
 }
 
 func badArgumentError(argumentName string, err error) error {
-	return fmt.Errorf("recieved argument [%v] is in wrong format: %v", argumentName, err)
+	return fmt.Errorf("received argument [%v] is in wrong format: %v", argumentName, err)
 }
 
 func newRuntimeSettings() *Settings {
