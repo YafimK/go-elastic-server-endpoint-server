@@ -6,9 +6,8 @@ import (
 )
 
 type DocumentCache struct {
-	QueryCache     map[string]model.Documents
-	DocumentsCache model.Documents
-	lock           sync.RWMutex
+	QueryCache map[string]model.Documents
+	lock       sync.RWMutex
 }
 
 func NewCache() *DocumentCache {
@@ -26,25 +25,9 @@ func (dc DocumentCache) LookupQueryCache(value string) model.Documents {
 	return nil
 }
 
-func (dc DocumentCache) LookupQueryByFieldCache(query map[string]string) model.Documents {
+func (dc *DocumentCache) InsertQuery(key string, value model.Documents) {
 	dc.lock.Lock()
 	defer dc.lock.Unlock()
 
-	//resultIndex := sort.Search(len(dc.DocumentsCache), func(i int) bool {
-	//	if query["ip"] != "" && dc.DocumentsCache[i].Ip != ip {
-	//		return false
-	//	}
-	//	if timestamp != "" && dc.DocumentsCache[i].Timestamp != timestamp {
-	//		return false
-	//	}
-	//	if domain != "" && dc.DocumentsCache[i].Domain != domain {
-	//		return false
-	//	}
-	//	if  != "" && dc.DocumentsCache[i].Domain != domain {
-	//		return false
-	//	}
-	//	return false
-	//})
-
-	return nil
+	dc.QueryCache[key] = value
 }

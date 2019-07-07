@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/YafimK/go-elastic-server-endpoint-server/cache"
 	"github.com/YafimK/go-elastic-server-endpoint-server/common"
 	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 	"github.com/YafimK/go-elastic-server-endpoint-server/model"
@@ -9,12 +10,11 @@ import (
 )
 
 type SearchController struct {
-	cache         interface{} //TODO:
-	elasticClient *elastic_service.ElasticClient
+	cache *cache.DocumentCache
 }
 
 func NewSearchController(elasticClient *elastic_service.ElasticClient) *SearchController {
-	return &SearchController{elasticClient: elasticClient}
+	return &SearchController{cache: cache.NewCache()}
 }
 
 type ElasticClientQueryByField func(typeParam string, valueParam string) (model.Documents, error)
