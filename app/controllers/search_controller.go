@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/YafimK/go-elastic-server-endpoint-server/cache"
 	"github.com/YafimK/go-elastic-server-endpoint-server/common"
-	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 	"github.com/YafimK/go-elastic-server-endpoint-server/model"
 	"net/http"
 )
@@ -13,7 +12,7 @@ type SearchController struct {
 	cache *cache.DocumentCache
 }
 
-func NewSearchController(elasticClient *elastic_service.ElasticClient) *SearchController {
+func NewSearchController() *SearchController {
 	return &SearchController{cache: cache.NewCache()}
 }
 
