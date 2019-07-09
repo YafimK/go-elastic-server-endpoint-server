@@ -2,12 +2,13 @@ package routes
 
 import (
 	"fmt"
-	"github.com/YafimK/go-elastic-server-endpoint-server/config"
-	"github.com/YafimK/go-elastic-server-endpoint-server/controllers"
-	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/YafimK/go-elastic-server-endpoint-server/config"
+	"github.com/YafimK/go-elastic-server-endpoint-server/controllers"
+	"github.com/YafimK/go-elastic-server-endpoint-server/elastic_service"
 )
 
 type SearchRoutingMap struct {
@@ -21,7 +22,7 @@ func NewSeachRoutingMap() *SearchRoutingMap {
 	if err != nil {
 		log.Fatalf("Failed startiing elastic server client: %v\n", err)
 	}
-	searchController := controllers.NewSearchController(elasticClient)
+	searchController := controllers.NewSearchController()
 	return &SearchRoutingMap{
 		elasticClient:    elasticClient,
 		searchController: searchController,
